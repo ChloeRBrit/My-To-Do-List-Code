@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System</title>
+
+    <style>
+        p {
+            color: rgb(151, 24, 201);
+            font-size: 18px;
+        }
+        /* CSS rule to change the button color */
+        button#add-task-btn {
+            background-color: #007bff; /* Change to your desired color */
+            color: white; /* Text color */
+            border: none; /* Remove default button border */
+            padding: 10px 20px; /* Add padding to make the button look nice */
+            border-radius: 5px; /* Add some rounded corners */
+        }
+
+        /* CSS rule to change button color on hover */
+        button#add-task-btn:hover {
+            background-color: #0056b3; /* Change to a darker shade when hovered */
+        }
+        .remove-btn {
+            color: red; /* Change to red */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Task Management System</h1>
+        <form id="task-form">
+            <label for="task-input">Enter Task:</label>
+            <input type="text" id="task-input" required>
+            <button type="button" id="add-task-btn">Add Task</button>
+        </form>
+
+        <ul id="task-list"></ul>
+
+        <!-- Use checkboxes to mark tasks as completed -->
+        <p>Check the box to mark a task as completed:</p>
+        
+        <!-- Message display area -->
+        <div id="completion-message" style="display: none;"></div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const taskForm = document.getElementById("task-form");
+            const addTaskBtn = document.getElementById("add-task-btn");
+            const taskList = document.getElementById("task-list");
+            const completionMessage = document.getElementById("completion-message"); // Reference to the message display area
+            let tasksAdded = 0;
+
+            addTaskBtn.addEventListener("click", function() {
+                const taskInput = document.getElementById("task-input");
+                const taskText = taskInput.value.trim();
+                if (taskText !== "") {
+                    const li = document.createElement("li");
+                    li.className = "task-item";
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    li.appendChild(checkbox);
+                    const taskTextSpan = document.createElement("span");
+                    taskTextSpan.textContent = taskText;
+                    taskTextSpan.className = "task-text";
+                    li.appendChild(taskTextSpan);
+                    const removeBtn = document.createElement("button");
+                    removeBtn.className = "remove-btn";
+                    removeBtn.textContent = "X";
+                    removeBtn.addEventListener("click", function() {
+                        li.remove();
+                        tasksAdded--;
+                    });
+                    li.appendChild(removeBtn);
+                    taskList.appendChild(li);
+                    taskInput.value = "";
+                    tasksAdded++;
+                } else {
+                    alert("Please enter a task.");
+                }
+            });
+
+            taskList.addEventListener("change", function(e) {
+                if (e.target.tagName === "INPUT" && e.target.type === "checkbox") {
+                    const taskText = e.target.nextSibling.textContent;
+                    if (e.target.checked) {
+                        // Do something when checkbox is checked (task completed)
+                        console.log("Task completed: " + taskText);
+                    } else {
+                        // Do something when checkbox is unchecked (task incomplete)
+                        console.log("Task incomplete: " + taskText);
+                    }
+
+                    // Check if all tasks are completed
+                    if (tasksAdded === taskList.querySelectorAll("input[type='checkbox']:checked").length) {
+                        celebrate();
+                    }
+                }
+            });
+
+            function celebrate() {
+                // Show the completion message
+                completionMessage.style.display = "block";
+                completionMessage.textContent = "Congratulations! All tasks completed!";
+            }
+        });
+    </script>
+</body>
+</html>
