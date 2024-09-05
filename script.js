@@ -57,7 +57,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function celebrate() {
         celebrationSound.play();
-        // Fireworks animation removed
         // You can add other celebratory effects here
 
         // Add your completion comment here
